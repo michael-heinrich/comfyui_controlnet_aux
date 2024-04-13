@@ -163,7 +163,7 @@ class OpenPose_Interpolator:
 
 
 
-    def interpolate_poses(self, from_image, to_image, batch_size, detect_hand, detect_body, detect_face, resolution=512, **kwargs):
+    def interpolate_poses(self, from_image, batch_size, detect_hand, detect_body, detect_face, to_image=None, resolution=512, **kwargs):
         from controlnet_aux.open_pose import OpenposeDetector, PoseResult, draw_poses
         from controlnet_aux.util import HWC3
 
