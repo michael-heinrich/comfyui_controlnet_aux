@@ -48,10 +48,10 @@ class OpenPose_Interpolator:
     def INPUT_TYPES(s):
         return {"required": {
             "from_image": ("IMAGE",),
-            "to_image": ("IMAGE",),
             "batch_size" : ("INT", {"default": 2, "min": 2, "max": 128, "step": 1}),
         },
         "optional": {
+            "to_image": ("IMAGE",),
             "detect_hand" : (["enable", "disable"], {"default": "enable"}),
             "detect_body" : (["enable", "disable"], {"default": "enable"}),
             "detect_face" : (["enable", "disable"], {"default": "enable"}),
@@ -181,6 +181,16 @@ class OpenPose_Interpolator:
             if len(result) > 2:
                 self.openpose_poses.append(result[2])
             return result[0]
+        
+        # if to_image is None, we need to find an alternative
+        if to_image is None:
+            # if from_image is a batch, we take the last image as to_image and the first image as from_image
+            if from_image.shape[0] > 1:
+                to_image = from_image[-1]
+                from_image = from_image[0]
+            else:
+                raise ValueError("You need to provide two images to interpolate between them!")
+
         
         out_from = common_annotator_call(cb, from_image, include_hand=detect_hand, include_face=detect_face, include_body=detect_body, image_and_json=True, resolution=resolution)
         out_to = common_annotator_call(cb, to_image, include_hand=detect_hand, include_face=detect_face, include_body=detect_body, image_and_json=True, resolution=resolution)
