@@ -240,6 +240,6 @@ class OpenposeDetector:
             detected_map = Image.fromarray(detected_map)
         
         if image_and_json:
-            return (detected_map, encode_poses_as_json(poses, detected_map.shape[0], detected_map.shape[1]))
+            return (detected_map, encode_poses_as_json(poses, detected_map.shape[0], detected_map.shape[1]), poses)
         
         return detected_map
