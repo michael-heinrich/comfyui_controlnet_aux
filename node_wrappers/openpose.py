@@ -186,8 +186,9 @@ class OpenPose_Interpolator:
         if to_image is None:
             # if from_image is a batch, we take the last image as to_image and the first image as from_image
             if from_image.shape[0] > 1:
-                to_image = from_image[-1]
-                from_image = from_image[0]
+                # make sure to keep the rank
+                to_image = from_image[-1:]
+                from_image = from_image[:1]
             else:
                 raise ValueError("You need to provide two images to interpolate between them!")
 
